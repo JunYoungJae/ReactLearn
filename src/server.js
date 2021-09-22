@@ -16,7 +16,6 @@ const server = async () => {
 
         app.use(express.json());
             
-        app.use('/api', require('./routes/test'));
         app.use('/api/masters', require('./routes/user/masterRoute'));
         app.use('/api/members', require('./routes/user/memberRoute'));
         app.use('/api/review', require('./routes/reviewRoute'));
