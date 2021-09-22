@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="categoryService">
+
+    <select id='getCategoryServices' >
+        select category_code as "categoryCode",
+               category_level as "categoryLevel",
+               category_name as "categoryName",
+               parent_category_code as "parentCategoryCode",
+               category_order as "categoryOrder"
+          from tb_category_service
+         where use_yn = '1'
+         order by category_order asc
+    </insert>
+</mapper>

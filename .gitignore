@@ -1,0 +1,4 @@
+node_modules/
+logs/
+src/config/
+dev.js

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+    <insert id='registerReview' >
+        insert into tb_review
+             (  review_no,
+                service_no,
+                master_no,
+                member_no,
+                content,
+                score,
+                delete_yn,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{reviewNo},
+                    #{serviceNo},
+                    #{masterNo},
+                    #{memberNo},
+                    #{content},
+                    #{score},
+                    #{deleteYn},
+                    #{registerId},
+                    current_timestamp,
+                    #{registerId},
+                    current_timestamp
+                )                        
+    </insert>
+</mapper>

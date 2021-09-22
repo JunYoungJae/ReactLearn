@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="masterInfo">
+
+    <select id='getMasterReviews'> 
+        SELECT
+        (SUBSTR(MEMBER_NAME, 1, 1) || '***' ) AS "memberName", 
+        R.CONTENT, 
+        R.SCORE, 
+        TO_CHAR(R.REGISTER_DATE, 'YYYY.MM.DD') AS "registerDay"
+        FROM
+        TB_REVIEW R,
+        TB_MEMBER M
+        WHERE R.MEMBER_NO = M.MEMBER_NO
+            AND R.MASTER_NO = #{masterNo}
+            AND R.DELETE_YN = '0'
+        ORDER BY REVIEW_NO DESC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+    <select id='getMasterService'> 
+        SELECT A.CATEGORY_CODE AS "categoryCode",
+               B.CATEGORY_NAME AS "categoryName"
+        FROM TB_MASTER_SERVICE A,
+             TB_CATEGORY_SERVICE B
+        WHERE A.CATEGORY_CODE = B.CATEGORY_CODE
+          AND MASTER_NO = #{masterNo}
+    </select>
+	
+    <select id='getMasterQnA'> 
+        SELECT SEQ AS "seq",
+            CONTENT AS "content"
+        FROM TB_MASTER_QANDA
+        WHERE MASTER_NO = #{masterNo}
+        ORDER BY SEQ ASC;
+    </select>
+
+    <select id='getMasterPayment'>   
+        SELECT A.PAYMENT_CODE AS "paymentCode",
+            B.COMMON_NAME AS "paymentName"
+        FROM TB_MASTER_PAYMENT A,
+             TB_COMMON_CODE B
+        WHERE A.PAYMENT_CODE = B.COMMON_CODE
+            AND B.GROUP_CODE = 'MA01'
+            AND MASTER_NO = #{masterNo}
+    </select>
+
+    <select id='getMasterBasicInfo'>    
+        SELECT M.MASTER_NAME as "masterName",
+            M.SIMPLE_APPEAL as "simpleAppeal",
+            CASE WHEN M.MOBILE = NULL THEN '0'
+                ELSE '1'
+            END "confirmYn",
+            (SELECT COUNT(1)
+                FROM TB_SERVICE
+                WHERE MASTER_NO = M.MASTER_NO
+                    AND STATUS = '01') as "hireCount", 
+            M.ADDRESS as "address",
+            M.CALL_FROM_TIME as "callFromTime",
+            M.CALL_TO_TIME as "callToTime",
+            M.CAREER as "career",
+            M.GENDER as "genderCode",
+			(SELECT COMMON_NAME 
+                FROM TB_COMMON_CODE 
+                WHERE GROUP_CODE = 'MA02' 
+                AND COMMON_CODE = GENDER) AS "genderName",
+            M.EMPLOYEES_COUNT as "employeesCount",
+            M.BUSINESS_REGISTRATION_YN as "businessRegistrationYn",
+            M.CERTIFICATE_YN as "certificateYn",
+            M.DETAIL_APPEAL as "detailAppeal",
+            (SELECT COUNT(1)
+                FROM TB_REVIEW S
+                WHERE S.DELETE_YN = '0'
+                    AND S.MASTER_NO = M.MASTER_NO ) AS "reviewCount",
+            (SELECT COALESCE(ROUND(AVG(SCORE), 1), 0)
+                FROM TB_REVIEW S
+                WHERE S.DELETE_YN = '0'
+                    AND S.MASTER_NO = M.MASTER_NO ) AS "score"
+        FROM TB_MASTER M
+        WHERE MASTER_NO = #{masterNo}
+    </select>
+    <select id='getMasters'>
+        SELECT A.MASTER_NO as "masterNo",
+            MASTER_NAME as "masterName",
+            (SELECT COUNT(1)
+                FROM TB_SERVICE S
+                WHERE S.STATUS = '01'
+                    AND S.MASTER_NO = A.MASTER_NO) AS "hireCount",
+            (SELECT COUNT(1)
+                FROM TB_REVIEW S
+                WHERE S.DELETE_YN = '0'
+                    AND S.MASTER_NO = A.MASTER_NO) AS "reviewCount",
+            (SELECT COALESCE(ROUND(AVG(SCORE), 1), 0)
+                FROM TB_REVIEW S
+                WHERE S.DELETE_YN = '0'
+                    AND S.MASTER_NO = A.MASTER_NO) AS "score",
+            B.CATEGORY_NAME as "categoryName",
+            (SELECT CONTENT
+                FROM TB_REVIEW R
+                WHERE R.REVIEW_NO = C.REVIEW_NO) AS "content",
+            (SELECT SUBSTR(MEMBER_NAME, 1, 1) || '***'
+                FROM TB_REVIEW R,
+                    TB_MEMBER M
+                WHERE R.REVIEW_NO = C.REVIEW_NO
+                    AND R.MEMBER_NO = M.MEMBER_NO) AS "memberName",
+            GENDER as "genderCode",
+			(SELECT COMMON_NAME 
+                FROM TB_COMMON_CODE 
+                WHERE GROUP_CODE = 'MA02' 
+                AND COMMON_CODE = GENDER) AS "genderName",
+            EMAIL as "email",
+            STATUS as "status",
+            MOBILE as "mobile",
+            ADDRESS as "address",
+            LAT as "lat",
+            LNG as "lng",
+            CATEGORY as "category"
+        FROM TB_MASTER A
+        LEFT OUTER JOIN
+            (SELECT MASTER_NO,
+                    MAX(REVIEW_NO) AS REVIEW_NO
+                FROM TB_REVIEW
+                WHERE DELETE_YN = '0'
+                GROUP BY MASTER_NO) AS C ON A.MASTER_NO = C.MASTER_NO
+        LEFT JOIN TB_CATEGORY_SERVICE B ON A.CATEGORY = B.CATEGORY_CODE
+        WHERE 1 = 1    
+        AND A.STATUS = '01'    
+        <if test='categoryList != null and categoryList.length > 0'>
+            AND CATEGORY IN
+            <foreach collection='categoryList' item='list' separator=',' open='(' close=')'>
+                #{list}
+            </foreach>
+        </if>
+        <if test="sort == 'review' ">
+        ORDER BY "reviewCount" DESC
+        </if>
+        <if test="sort == 'hire' ">
+        ORDER BY "hireCount" DESC
+        </if>
+        <if test="sort == 'score' ">
+        ORDER BY "score" DESC
+        </if>
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+    
+    <select id='getMasterNo'>
+        select nextval('sq_master_no') as master_no
+    </select>
+    
+    <insert id='addMaster' >
+        insert into tb_master
+             (  master_no,
+                master_name,
+                gender,
+                email,
+                status,
+                mobile,
+                password,
+                address,                
+                lat,
+                lng,
+                category,
+                token,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{masterNo},
+                    #{masterName},
+                    #{gender},
+                    #{email},
+                    #{status},
+                    #{mobile},
+                    #{password},
+                    #{address},
+                    #{lat},
+                    #{lng},
+                    #{category},
+                    #{token},
+                    #{regitster_id},
+                    current_timestamp,
+                    #{regitster_id},
+                    current_timestamp
+                )                        
+    </insert>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="service">
+
+    <insert id='addService' >
+        insert into tb_service
+             (  service_no,
+                sign_day,
+                sign_time,
+                status,
+                sign_amount,
+                master_no,
+                member_no,
+                quot_no,                
+                sign_channel,
+                category_service,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{serviceNo},
+                    #{signDay},
+                    #{signTime},
+                    #{status},
+                    #{signAmount},
+                    #{masterNo},
+                    #{memberNo},
+                    #{quotNo},
+                    #{signChannel},
+                    #{categoryService},                    
+                    #{registerId},
+                    current_timestamp,
+                    #{registerId},
+                    current_timestamp
+                )          
+    </insert>
+</mapper>

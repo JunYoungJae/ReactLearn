@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberInfo">
+
+    <select id='getMemberNo'>
+        select nextval('sq_member_no')
+    </select>
+    
+    <insert id='addMember' >
+        INSERT INTO tb_member
+             (  member_no,
+                member_name,
+                gender,
+                email_address,
+                status,
+                mobile,
+                password,
+                address,                
+                lat,
+                lng,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{memberNo},
+                    #{memberName},
+                    #{gender},
+                    #{emailAddress},
+                    #{status},
+                    #{mobile},
+                    #{password},
+                    #{address},
+                    #{lat},
+                    #{lng},
+                    #{regitster_id},
+                    current_timestamp,
+                    #{regitster_id},
+                    current_timestamp
+                )                        
+    </insert>
+</mapper>

@@ -1,0 +1,32 @@
+{
+  "name": "themasterserver",
+  "version": "1.0.0",
+  "description": "The Master",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "env-cmd -f src/config/.env node src/server.js",
+    "dev": "env-cmd -f src/config/.env nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "env-cmd": "^10.1.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "faker": "^5.5.3",
+    "moment": "^2.29.1",
+    "mybatis-mapper": "^0.6.5",
+    "mysql": "^2.18.1",
+    "pg": "^8.7.1",
+    "postgresql": "0.0.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
