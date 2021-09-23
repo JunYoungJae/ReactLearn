@@ -20,6 +20,7 @@ const server = async () => {
         app.use('/api/members', require('./routes/user/memberRoute'));
         app.use('/api/review', require('./routes/reviewRoute'));
         app.use('/api/service', require('./routes/serviceRoute'));
+        app.use('/api/quot', require('./routes/quotRoute'));
         app.use('/api/categoryService', require('./routes/categoryServiceRoute'));
  
         // Server Port

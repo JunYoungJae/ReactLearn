@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="quot">
+    <select id='getQuotStep' >
+        SELECT A.CATEGORY_CODE,
+            B.CATEGORY_NAME,
+            A.STEP,
+            A.STEP_ORDER,
+            A.TITLE
+        FROM TB_QUOT_STEP A,
+            TB_CATEGORY_SERVICE B
+        WHERE A.CATEGORY_CODE = B.CATEGORY_CODE
+            AND A.CATEGORY_CODE = #{categoryCode}
+        ORDER BY A.STEP,
+            A.STEP_ORDER
+    </select>
+
+    <select id='getQuotQustions' >
+        SELECT A.CATEGORY_CODE,
+            A.STEP,
+            B.SEQ,
+            B.QUESTION_ORDER,
+            B.QUESTION
+        FROM TB_QUOT_STEP A,
+            TB_QUOT_STEP_QUESTION B
+        WHERE A.CATEGORY_CODE = B.CATEGORY_CODE
+            AND A.STEP = B.STEP
+            AND A.CATEGORY_CODE = #{categoryCode}
+        ORDER BY A.STEP,
+            A.STEP_ORDER,
+            B.SEQ,
+            B.QUESTION_ORDER
+    </select>
+    <insert id='addQuotStep' >
+        INSERT INTO TB_QUOT_STEP
+             (  category_code,
+                step,
+                step_order,
+                title,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{categoryCode},
+                    #{step},
+                    #{order},
+                    #{title},                  
+                    #{registerId},
+                    current_timestamp,
+                    #{registerId},
+                    current_timestamp
+                )          
+    </insert>
+    
+    <insert id='addQuotStepQuestion' >
+        INSERT INTO TB_QUOT_STEP_QUESTION
+             (  category_code,
+                step,
+                seq,
+                question_order,
+                question,
+                register_id,
+                register_date,
+                update_id,
+                update_date
+                ) VALUES(
+                    #{categoryCode},
+                    #{step},
+                    #{seq},
+                    #{questionOrder},
+                    #{question},                  
+                    #{registerId},
+                    current_timestamp,
+                    #{registerId},
+                    current_timestamp
+                )          
+    </insert>
+    
+</mapper>
