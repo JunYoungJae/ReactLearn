@@ -23,18 +23,18 @@ function Member(
   token,
   regitster_id
 ) {
-  (this.memberNo = memberNo),
-  (this.memberName = memberName),
-  (this.gender = gender),
-  (this.emailAddress = emailAddress),
-  (this.status = status),
-  (this.mobile = mobile),
-  (this.password = password),
-  (this.address = address),
-  (this.token = token),
-  (this.lat = lat),
-  (this.lng = lng),
-  (this.regitster_id = regitster_id),
+  this.memberNo = memberNo;
+  this.memberName = memberName;
+  this.gender = gender;
+  this.emailAddress = emailAddress;
+  this.status = status;
+  this.mobile = mobile;
+  this.password = password;
+  this.address = address;
+  this.token = token;
+  this.lat = lat;
+  this.lng = lng;
+  this.regitster_id = regitster_id;
 }
 
 Member.prototype.setMemberNo = (value) => {

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const pg = require('./DB/pg');
+const db = require('./sequelize-models');
 const { APP_PORT } = process.env;
 const { generateFakeData } = require('./faker');
 
@@ -9,6 +10,14 @@ const server = async () => {
     if (!APP_PORT) throw new Error('Please add .env file. Thanks');
 
     await pg.connectDB();
+    try {
+      await db.sequelize.sync({
+        force: true,
+      });
+    } catch (error) {
+      console.log('#sequelize Error');
+      console.log(error);
+    }
 
     //await generateFakeData(100);
     //await generateCategoryData();
