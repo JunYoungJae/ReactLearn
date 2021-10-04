@@ -2,7 +2,7 @@ const express = require('express');
 const categoryServiceRouter = express.Router();
 
 const {
-  getCategoryServices
+  getCategoryServices,
 } = require('../controllers/categoryServiceController');
 
 categoryServiceRouter.route('/getCategoryServices').get(getCategoryServices);
