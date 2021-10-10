@@ -95,6 +95,7 @@ Member.prototype.insertMember = async (req, res) => {
 
     var memberNo = await pg
       .getconnection()
+      // eslint-disable-next-line quotes
       .query("select nextval('sq_member_no')");
     memberNo = String(memberNo['rows'][0]['nextval']);
     memberNo = String(_no + memberNo.toString()).substr(

@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
+require('express-async-errors');
 const pg = require('./DB/pg');
-const db = require('./sequelize-models');
+const db = require('./models/sequelize-models');
 const { APP_PORT } = process.env;
 const { generateFakeData } = require('./faker');
 
@@ -12,7 +13,7 @@ const server = async () => {
     await pg.connectDB();
     try {
       await db.sequelize.sync({
-        force: true,
+        force: false,
       });
     } catch (error) {
       console.log('#sequelize Error');
@@ -25,12 +26,16 @@ const server = async () => {
 
     app.use(express.json());
 
-    app.use('/api/masters', require('./routes/user/masterRoute'));
-    app.use('/api/members', require('./routes/user/memberRoute'));
+    app.use('/api', require('./routes'));
+    // app.use('/api/masters', require('./routes/user/masterRoute'));
+    // app.use('/api/members', require('./routes/user/memberRoute'));
     app.use('/api/review', require('./routes/reviewRoute'));
     app.use('/api/service', require('./routes/serviceRoute'));
     app.use('/api/quot', require('./routes/quotRoute'));
     app.use('/api/categoryService', require('./routes/categoryServiceRoute'));
+
+
+    app.use(require('./middlewares/error'));
 
     // Server Port
     app.listen(APP_PORT, () => {

@@ -1,48 +1,66 @@
+const bcrypt = require('bcrypt');
 const { Model } = require('sequelize');
-class Member extends Model {}
+
+
+class Member extends Model {
+
+  isEqualPassword(password){
+    console.log('###isEqualPassword');
+    console.log(password);
+    console.log(this.password);
+    const isEqual = bcrypt.compareSync(password, this.password);
+    
+    return isEqual;
+  }
+}
 
 module.exports = (sequelize, dataTypes) => {
   Member.init(
     {
       memberNo: {
-        type: dataTypes.STRING,
+        type: dataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
       },
       memberName: {
         type: dataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       gender: {
-        type: dataTypes.STRING(2),
-        allowNull: false,
+        type: dataTypes.STRING(4),
+        allowNull: true,
       },
       emailAddress: {
         type: dataTypes.STRING(1024),
         allowNull: false,
       },
       status: {
-        type: dataTypes.STRING(2),
-        allowNull: false,
+        type: dataTypes.STRING,
+        allowNull: true,
       },
       mobile: {
         type: dataTypes.STRING(),
-        allowNull: false,
+        allowNull: true,
       },
       password: {
         type: dataTypes.STRING(),
         allowNull: false,
+        set(value){
+          const hash = bcrypt.hashSync(value, 10);
+          this.setDataValue('password', hash);
+        }
       },
       address: {
         type: dataTypes.STRING(1024),
-        allowNull: false,
+        allowNull: true,
       },
       lat: {
         type: dataTypes.DOUBLE,
-        allowNull: false,
+        allowNull: true,
       },
       lng: {
         type: dataTypes.DOUBLE,
-        allowNull: false,
+        allowNull: true,
       },
       token: {
         type: dataTypes.STRING(1024),
@@ -53,22 +71,22 @@ module.exports = (sequelize, dataTypes) => {
        */
       registerId: {
         type: dataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       registerDate: {
         type: dataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       /**
        * TODO: 확인 필요
        */
       updateId: {
         type: dataTypes.STRING(),
-        allowNull: false,
+        allowNull: true,
       },
       updateDate: {
         type: dataTypes.DATE(),
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
@@ -77,6 +95,8 @@ module.exports = (sequelize, dataTypes) => {
       modelName: 'Member',
     }
   );
+
+
 
   return Member;
 };
