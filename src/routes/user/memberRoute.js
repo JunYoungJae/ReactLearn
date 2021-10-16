@@ -4,7 +4,7 @@ const memberRouter = express.Router();
 const {
   getMembers,
   addMember,
-  getMember
+  getMember,
 } = require('../../controllers/user/memberController');
 
 memberRouter.route('/').get(getMembers);

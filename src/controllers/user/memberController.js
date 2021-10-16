@@ -8,8 +8,8 @@ const memberRouter = require('../../routes/user/memberRoute');
 // @access    Public
 const getMembers = asyncHandler(async (req, res, next) => {
   const members = new mem();
-  
-  members.setMBR_NO("0000001");
+
+  members.setMBR_NO('0000001');
   return res.json({ members });
 });
 
@@ -17,7 +17,7 @@ const getMembers = asyncHandler(async (req, res, next) => {
 // @route     Get /:memberId
 // @access    Private
 const getMember = asyncHandler(async (req, res, next) => {
-    const member = '';
+  const member = '';
 
   return res.send({ member });
 });
@@ -26,7 +26,7 @@ const getMember = asyncHandler(async (req, res, next) => {
 // @route     Get /:memberId
 // @access    Private
 const addMember = asyncHandler(async (req, res, next) => {
-  console.log('call addMember')
+  console.log('call addMember');
   try {
     var memberNo = '0000000003';
     var memberName = String(req.body.memberName);
@@ -39,44 +39,45 @@ const addMember = asyncHandler(async (req, res, next) => {
     var lat = String(req.body.lat);
     var lng = String(req.body.lng);
     var register_id = String(req.body.register_id);
-  
-    var item = new Member(memberNo
-                        , memberName
-                        , gender
-                        , emailAddress
-                        , status
-                        , mobile
-                        , password
-                        , address
-                        , address
-                        , lat
-                        , lng
-                        , register_id);
-  
+
+    var item = new Member(
+      memberNo,
+      memberName,
+      gender,
+      emailAddress,
+      status,
+      mobile,
+      password,
+      address,
+      address,
+      lat,
+      lng,
+      register_id
+    );
+
     console.log('item', item);
-  
+
     var result = await item.insertMember(item);
     console.log('item', result);
     if (result['severity'] === 'ERROR') {
       return res.send({
-        MESSAGE_CODE: "02",
-        MESSAGE_NAME: "Fail",
-        result
-      })
+        MESSAGE_CODE: '02',
+        MESSAGE_NAME: 'Fail',
+        result,
+      });
     } else {
       return res.send({
-          MESSAGE_CODE: "01",
-          MESSAGE_NAME: "Success",
-          result
-        });
+        MESSAGE_CODE: '01',
+        MESSAGE_NAME: 'Success',
+        result,
+      });
     }
-  
-  } catch(err) {
+  } catch (err) {
     return res.send({
-      MESSAGE_CODE: "02",
-      MESSAGE_NAME: "Fail",
-      err
-    })
+      MESSAGE_CODE: '02',
+      MESSAGE_NAME: 'Fail',
+      err,
+    });
   }
 });
 

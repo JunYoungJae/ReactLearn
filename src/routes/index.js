@@ -7,11 +7,9 @@ const serviceRoute = require('./serviceRoute');
 const quotRoute = require('./quotRoute');
 const categoryServiceRoute = require('./categoryServiceRoute');
 
-router.use('/api/members', memberRoute);
-router.use('/api/masters', masterRouter);
-router.use('/api/review', reviewRoute);
-router.use('/api/service', serviceRoute);
-router.use('/api/quot', quotRoute);
-router.use('/api/categoryService', categoryServiceRoute);
+const router = require('express').Router();
+const apiRouter = require('./api');
+
+router.use('/', apiRouter);
 
 module.exports = router;
